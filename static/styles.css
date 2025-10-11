@@ -1,0 +1,18 @@
+body{
+    background-color: lightcyan;
+}
+h1{
+    color:blue;
+    font-family: "Quicksand", sans-serif;
+    text-align: center;
+}
+p{
+    color:#E0A296;
+    font-size: 25px;
+}
+img{
+    width: 55%;
+}
+.color-orange{
+    color: orange;
+}

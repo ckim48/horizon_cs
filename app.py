@@ -11,6 +11,21 @@ def index():
 def login():
     return render_template('login.html')
 
+@app.route('/main')
+def main():
+    return render_template('main.html')
+
+
+# Scenario
+# Time period (ex) in 2035 or after a new government policy)
+# Place: rurual vs city, south korea vs usa
+# describe the view of different stakeholder. ex) if taxi driver is replaced by AI
+# driver vs company vs customer vs government  --> they might have different opinion of replacing taxi driver with AI.
+#  ++ social impact, economic impact with the realistic numbers ( details about the cost we need for replacing job with AI)
+
+# Options --> related to the pace of adapation --> speed & scope
+# option A --> replace all the taxi driver in 2 yeaers in rural , then replacd all the taxi driver in next 3 years in main cities.
+
 # Generate a scenario, and options for decision-making using GPT model.
 def generate_scenario(job):
     system = (

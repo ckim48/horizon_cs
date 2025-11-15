@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <title>Project Horizon | Dashboard</title>
+  <style>
+    .card{
+        border: 2px solid lightpink;
+        background-color: #FCEBEB;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+      <div class="row mt-5">
+          <div class="col-md-6">
+            <div class="card p-5">
+              <canvas id="radarTraits"></canvas>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <canvas id="barTraits"></canvas>
+          </div>
+      </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  <script>
+    graph = document.getElementById('radarTraits');
+    graph2 = document.getElementById('barTraits');
+    labelsTraits = ["Creativity","Logic","Empathy","Risk","Discipline","Collaboration"];
+    dataTraits = [50,30,20,10,30,70];
+
+    new Chart(graph, {
+      type: 'radar',
+      data: {
+        labels: labelsTraits,
+        datasets: [{
+          label: "Traits",
+          data: dataTraits
+        }]
+      }
+    });
+
+    new Chart(graph2, {
+        type: 'bar',
+      data: {
+        labels: labelsTraits,
+        datasets: [{
+          label: "Traits",
+          data: dataTraits
+        }]
+      }
+    });
+
+  </script>
+
+</body>
+</html>

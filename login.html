@@ -41,14 +41,19 @@
     <div class="row justify-content-center align-items-center">
       <div class="card login-card mt-5">
         <h2 class="text-center">Login</h2>
-        <form>
+        <form action="/login" method="POST">
           <div class="mb-3">
-            <input type="text" class="form-control" placeholder="Enter your username">
+            <input name="username" type="text" class="form-control" placeholder="Enter your username">
           </div>
           <div class="mb-3">
-            <input type="password" class="form-control" placeholder="Enter your password">
+            <input name ="password" type="password" class="form-control" placeholder="Enter your password">
           </div>
-          <button class="btn btn-login d-block mx-auto">Submit</button>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <p>{{messages[0]}}</p>
+                {% endif %}
+            {% endwith %}
+          <button type="submit" class="btn btn-login d-block mx-auto">Submit</button>
         </form>
       </div>
     </div>

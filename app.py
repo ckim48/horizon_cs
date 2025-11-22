@@ -1,15 +1,59 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, flash
 from openai import OpenAI
+import sqlite3
 import json
 app = Flask(__name__) # Creating an empty web app.
+app.config["SECRET_KEY"] = "abc"
+
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/login')
+@app.route('/login', methods = ["GET", "POST"])
 def login():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password") # what user put on login
+
+        conn = sqlite3.connect('app.db') # connecting to DB
+        cur = conn.cursor()
+
+        # Get password in form of object for the given username from the DB
+        row = cur.execute("SELECT password from Users where username = ?",(username,))
+        print(row.fetchone())
+        if row.fetchone() is None: # username is not in our DB --> login fail
+            flash('Wrong username or password')
+            return render_template('login.html')
+        db_password = row.fetchone()[0] # for getting password from the object in form of String value
+        conn.close()
+
+        if password == db_password:  # login success
+            flash('Wrong username or password')
+            return redirect(url_for('index')) # go to homepage
+        return render_template('login.html') # when login fail stay on login page
+
     return render_template('login.html')
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
+@app.route('/register', methods = ["GET", "POST"])
+def register():
+    if request.method == "POST": # when users send their username/password --> so we should save them into our DB.
+        username = request.form.get("username") # we get what user put on the input for the username
+        password = request.form.get("password") # something for the password
+
+        conn = sqlite3.connect('app.db') # connecting to DB
+        cur = conn.cursor() # for creating an object for executing SQL code in Python
+
+        # will add the username and password to our DB --> allowing the user to register on our website
+        cur.execute("INSERT INTO users (username,password) VALUES (?,?)",(username,password))
+        conn.commit() # Saving DB
+        conn.close() # Disconnecting with DB
+        return redirect(url_for('login')) # done with the register so send user to the login page
+    return render_template('register.html')
 
 @app.route('/main')
 def main():

@@ -1,69 +1,487 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Project Horizon</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Project Horizon • Scenario Flow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    /* ============================
+       1. Color variables for theme
+       - Change these to quickly update the whole color scheme
+       ============================ */
+    :root{
+      --ink: #0f172a;
+      --muted: #64748b;
+      --bg: #f7f8fb;
+      --card: #ffffff;
+      --brand: #3b82f6;
+      --brand-weak: #e7f0ff;
+    }
+
+    /* ============================
+       2. Page background and text
+       - body background and default text color
+       ============================ */
+    body{
+      background: #E3BCB6;
+      color: var(--ink);
+    }
+
+    /* ============================
+       3. Small rounded logo square
+       - Shown at top-left next to "Project Horizon"
+       ============================ */
+    .brand-logo{
+      width: 38px;
+      height: 38px;
+      border-radius: 0.7rem;
+      background: linear-gradient(135deg, var(--brand), #7aa8ff);
+    }
+
+    /* ============================
+       4. Soft card shadow
+       - Used on main cards so they pop from background
+       ============================ */
+    .shadow-soft{
+      box-shadow: 0 1rem 2.25rem rgba(2, 6, 23, 0.08);
+    }
+
+    /* ============================
+       5. Scenario image placeholder background
+       - You can replace this with a real image later
+       ============================ */
+    .ratio-placeholder{
+      background: repeating-linear-gradient(
+        45deg,
+        #eef3ff,
+        #eef3ff 12px,
+        #e6ecfb 12px,
+        #e6ecfb 24px
+      );
+      border-radius: 0.75rem;
+      overflow: hidden;
+    }
+
+    /* ============================
+       6. Placeholder icon transparency
+       - Makes the SVG icon look lighter
+       ============================ */
+    .ratio-placeholder svg{
+      opacity: 0.35;
+    }
+
+    /* ============================
+       7. Option tile (answer choice)
+       - Border, spacing, and layout of each option
+       ============================ */
+    .opt-tile{
+      border: 1px solid #e6ecfb;
+      border-radius: 0.75rem;
+      padding: 1rem 1.25rem;
+      text-align: left;
+    }
+
+    /* ============================
+       8. Letter label inside option (A, B, C, D)
+       - Makes the letter bold and slightly separated
+       ============================ */
+    .opt-tile .lead{
+      font-weight: 700;
+      margin-right: 0.25rem;
+    }
+
+    /* ============================
+       9. Hover effect for options
+       - Slight shadow and lift when mouse is over an option
+       ============================ */
+    .opt-tile:hover{
+      box-shadow: 0 0.75rem 1.5rem rgba(23, 37, 84, 0.08);
+      transform: translateY(-1px);
+      transition: 0.15s;
+    }
+
+    /* ============================
+       10. Selected option style
+       - When the hidden radio button is checked, style its label
+       ============================ */
+    .btn-check:checked + .opt-tile{
+      border-color: var(--brand);
+      box-shadow: 0 0.75rem 1.5rem rgba(59, 130, 246, 0.18);
+      background: #fbfdff;
+    }
+
+    /* ============================
+       11. Timeline step number badges
+       - The small circles with numbers 1–5 on the right side
+       ============================ */
+    .timeline .badge{
+      width: 2rem;
+      height: 2rem;
+      display: grid;
+      place-items: center;
+    }
+
+    /* ============================
+       12. Active step in timeline
+       - Background when a step is currently selected
+       ============================ */
+    .timeline .list-group-item.active{
+      background: var(--brand-weak);
+      color: inherit;
+      border-color: var(--brand-weak);
+    }
+
+    /* ============================
+       13. Summary "pill" style
+       - Used to show Step 1: Option A, etc. at the end
+       ============================ */
+    .pill{
+      display: inline-flex;
+      gap: 0.5rem;
+      align-items: center;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #e3e9ff;
+      background: #f1f5ff;
+      border-radius: 999px;
+      font-size: 0.9rem;
+    }
+    .roboto{
+        font-family:"Roboto Mono", monospace;
+    }
+    .btn-horizon{
+        background-color: black;
+        color: white;
+        font-size: 25px;
+        border: 3px dashed #D96757;
+        padding: 20px 50px;
+    }
+    .btn-horizon:hover{
+        background-color: #D96757;
+        border: 3px dashed black;
+    }
+    .main-card{
+      border: 2px solid #D13D26;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-7">
-        <div class="card mt-4">
-          <div class="card-body">
-              <div class="d-flex align-items-center justify-content-between">
-                  <span class="badge text-bg-success-subtle text-success-emphasis">SCENARIO</span>
-                  <span class="text-muted small">Placeholder content</span>
+  <div class="container py-4 py-md-5">
+
+    <!-- ============================
+         Header: Logo + Title + Progress Bar
+         - Students can change the title or remove the bar here
+         ============================ -->
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <div class="d-flex align-items-center gap-3">
+        <!-- Logo square -->
+        <div class="brand-logo"></div>
+
+        <!-- Title and step label -->
+        <div class="roboto">
+          <h1 class="h5 mb-1 fw-bold">Project Horizon</h1>
+          <div id="stepLabel" class="text-muted small">Step 1 of 5</div>
+        </div>
+      </div>
+
+      <!-- Progress bar (hidden on very small screens) -->
+      <div class="w-50 d-none d-sm-block">
+        <div class="progress" role="progressbar" aria-label="Scenario progress">
+          <!-- Width is updated by JavaScript -->
+          <div id="bar" class="progress-bar" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3 g-lg-4">
+      <!-- ============================
+           Main area: Scenario + Options
+           - Left side of the layout
+           ============================ -->
+      <div class="col-lg-7">
+        <div class="card shadow-soft main-card">
+          <div class="card-body p-3 p-md-4">
+
+            <!-- Scenario label and hint text -->
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <!-- Text like "SCENARIO 1" changes via JS -->
+              <span id="sceneTag" class="badge text-bg-primary-subtle text-primary-emphasis">SCENARIO</span>
+              <!-- Extra hint about sequence or step -->
+              <span id="sceneHint" class="text-muted small">Placeholder content</span>
+            </div>
+
+            <!-- Image or placeholder area -->
+            <!-- Right now it shows a patterned background with an icon -->
+            <!-- Later you can replace with real images -->
+            <div class="ratio ratio-16x9 mb-3 ratio-placeholder" id="imgBox" aria-label="Scenario image placeholder">
+              <div class="d-flex w-100 h-100 align-items-center justify-content-center">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="76" height="76" aria-hidden="true">
+                  <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2ZM6 7h12v10H6V7Zm2 2v6h8V9H8Z"/>
+                </svg>
               </div>
-              <div class="mt-2 mb-4">
-                <img class="img-fluid rounded-4" src="../static/images/placeholder1.jpg">
+            </div>
+
+            <!-- Scenario description text -->
+            <!-- JavaScript changes this text depending on the current step -->
+            <p id="scenarioText" class="mb-3">Loading…</p>
+
+            <!-- Options (radio buttons) are injected here by JavaScript -->
+            <!-- Each option is styled as a clickable tile -->
+            <form id="options" class="vstack gap-2" role="radiogroup" aria-labelledby="sceneTag"></form>
+
+            <!-- Navigation buttons: Back, Skip, Next/Finish -->
+            <div class="d-flex align-items-center justify-content-between mt-3">
+              <!-- Back button goes to previous step -->
+              <button id="backBtn" type="button" class="btn btn-outline-secondary">Back</button>
+
+              <div class="d-flex gap-2">
+                <!-- Skip button: move forward without saving an answer -->
+                <button id="skipBtn" type="button" class="btn btn-horizon">Skip</button>
+                <!-- Next button: disabled until an option is selected -->
+                <!-- On last step, text changes to "Finish" -->
+                <button id="nextBtn" type="button" class="btn btn-primary" disabled>Next</button>
               </div>
-              <p>
-                  In 2050, taxi drivers are replaced by AI. In 2050,
-                  taxi drivers are replaced by AI. In 2050, taxi drivers are replaced by AI. In 2050, taxi drivers are replaced by AI.
-                  In 2050, taxi drivers are replaced by AI. taxi drivers are replaced by AI. In 2050, taxi drivers are replaced by AI. In 2050, taxi drivers are replaced by AI.
-                  In 2050, taxi drivers are replaced by AI. taxi drivers are replaced by AI. In 2050, taxi drivers are replaced by AI. In 2050, taxi drivers are replaced by AI.
-                  In 2050, taxi drivers are replaced by AI.taxi drivers are replaced by AI. In 2050, taxi drivers are replaced by AI. In 2050, taxi drivers are replaced by AI.
-                  In 2050, taxi drivers are replaced by AI. taxi drivers are replaced by AI. In 2050, taxi drivers are replaced by AI. In 2050, taxi drivers are replaced by AI.
-                 In 2050, taxi drivers are replaced by AI taxi drivers are replaced by AI. In 2050, taxi drivers are replaced by AI. In 2050, taxi drivers are replaced by AI.
-              </p>
-              <form>
-                  <div>
-                      <input type="radio"> Option 1
-                  </div>
-                  <div>
-                      <input type="radio"> Option 2
-                  </div>
-                  <div>
-                    <input type="radio"> Option 3
-                  </div>
-                  <div>
-                    <input type="radio"> Option 4
-                  </div>
-                  <div>
-                    <input type="radio"> Option 5
-                  </div>
-              </form>
-              <div class="mt-4 d-flex align-items-center justify-content-between">
-                  <button class="btn btn-secondary">Back</button>
-                  <button class="btn btn-primary">Next</button>
-              </div>
+            </div>
+
           </div>
         </div>
       </div>
-      <div class="col-md-5">
-          <div class="card mt-4">
-              <div class="card-body">
-                  <div class="d-flex align-items-center justify-content-between">
-                      <span class="badge text-bg-success-subtle text-success-emphasis">Sequence</span>
-                      <span class="text-muted small">1/5 steps</span>
-                  </div>
 
-              </div>
+      <!-- ============================
+           Aside: Timeline + Summary
+           - Right side of the layout
+           ============================ -->
+      <div class="col-lg-5">
+        <!-- Timeline card: shows the 5-step sequence -->
+        <div class="card border-0 shadow-soft mb-3">
+          <div class="card-body p-3 p-md-4">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="badge text-bg-secondary-subtle text-secondary-emphasis">SEQUENCE</span>
+              <span class="text-muted small">5 steps</span>
+            </div>
+            <!-- Timeline items are created by JavaScript -->
+            <ul id="timeline" class="list-group list-group-flush timeline"></ul>
           </div>
+        </div>
+
+        <!-- Summary card: appears on final step -->
+        <!-- Shows chosen options for each step -->
+        <div id="summary" class="card border-0 shadow-soft d-none">
+          <div class="card-body p-3 p-md-4">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="badge text-bg-info-subtle text-info-emphasis">SUMMARY</span>
+              <span class="text-muted small">Your selections</span>
+            </div>
+            <!-- Summary of answers (Step 1: A – text) inserted by JS -->
+            <div id="summaryBody" class="text-muted">No selections yet.</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+<script>
+  /* ==========================================================
+     Scenario data (FLOW)
+     - Students can edit this array to create their own scenarios
+     ========================================================== */
+  const FLOW = Array.from({length:5}, (_,i)=>({
+    id: i + 1,
+    title: `Scenario ${i + 1}`,
+    hint: `Sequence ${i + 1} / 5`,
+    image: `placeholder-${i + 1}.jpg`,
+    text: `This is placeholder text for scenario ${i + 1}. Replace with real content describing the situation, context, and objective of this step.`,
+    options: [
+      { key: 'A', text: `Option A placeholder for scenario ${i + 1}` },
+      { key: 'B', text: `Option B placeholder for scenario ${i + 1}` },
+      { key: 'C', text: `Option C placeholder for scenario ${i + 1}` },
+      { key: 'D', text: `Option D placeholder for scenario ${i + 1}` },
+    ]
+  }));
+
+  // ====== State ======
+  // idx: current step index (0..4)
+  let idx = 0;
+  // answers: Map from step index to chosen option {key, text}
+  const answers = new Map();
+
+  // ====== Elements ======
+  const bar = document.getElementById('bar');
+  const stepLabel = document.getElementById('stepLabel');
+  const sceneTag = document.getElementById('sceneTag');
+  const sceneHint = document.getElementById('sceneHint');
+  const imgBox = document.getElementById('imgBox');
+  const scenarioText = document.getElementById('scenarioText');
+  const optionsEl = document.getElementById('options');
+  const backBtn = document.getElementById('backBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const skipBtn = document.getElementById('skipBtn');
+  const timeline = document.getElementById('timeline');
+  const summary = document.getElementById('summary');
+  const summaryBody = document.getElementById('summaryBody');
+
+  // ====== Render timeline on the right ======
+  function renderTimeline(){
+    // Clear existing items
+    timeline.innerHTML = '';
+    FLOW.forEach((step, i)=>{
+      const li = document.createElement('li');
+      // Add "active" class to current step
+      li.className = 'list-group-item d-flex align-items-center gap-2 ' + (i === idx ? 'active' : '');
+      li.innerHTML = `
+        <span class="badge text-bg-primary-subtle text-primary-emphasis">${i + 1}</span>
+        <div class="flex-grow-1">
+          <div class="fw-semibold">${step.title}</div>
+          <div class="text-muted small">${step.hint}</div>
+        </div>`;
+      timeline.appendChild(li);
+    });
+  }
+
+  // ====== Render current step (main panel) ======
+  function render(){
+    const step = FLOW[idx];
+
+    // Progress bar: 0% on first step, 100% on last
+    const pct = (idx) / (FLOW.length - 1) * 100;
+    bar.style.width = pct + "%";
+    bar.setAttribute('aria-valuenow', Math.round(pct));
+
+    // Step label text
+    stepLabel.textContent = `Step ${idx + 1} of ${FLOW.length}`;
+
+    // Scenario tag (title) and hint
+    sceneTag.textContent = step.title.toUpperCase();
+    sceneHint.textContent = step.hint;
+
+    // Scenario text
+    scenarioText.textContent = step.text;
+
+    // Options area: remove old options, then rebuild
+    optionsEl.innerHTML = '';
+
+    // If the user already picked something earlier, restore that
+    const prev = answers.get(idx)?.key;
+
+    step.options.forEach(o=>{
+      const id = `opt-${idx}-${o.key}`;
+      const checked = prev === o.key;
+
+      // Hidden radio input
+      const input = document.createElement('input');
+      input.type = 'radio';
+      input.className = 'btn-check';
+      input.name = 'opt';
+      input.id = id;
+      input.autocomplete = 'off';
+      if(checked){
+        input.checked = true;
+      }
+
+      // Visual tile (label)
+      const label = document.createElement('label');
+      label.className = 'opt-tile btn w-100';
+      label.setAttribute('for', id);
+      label.innerHTML = `<span class="lead">${o.key}.</span> <span>${o.text}</span>`;
+
+      // When any option changes, enable Next button
+      input.addEventListener('change', () => {
+        nextBtn.disabled = false;
+      });
+
+      optionsEl.appendChild(input);
+      optionsEl.appendChild(label);
+    });
+
+    // Navigation button states
+    backBtn.disabled = (idx === 0);
+    nextBtn.textContent = (idx === FLOW.length - 1) ? 'Finish' : 'Next';
+    // Disable Next if there is no stored answer yet
+    nextBtn.disabled = !answers.get(idx);
+
+    // Update timeline on the right
+    renderTimeline();
+
+    // Show summary only on last step
+    if(idx === FLOW.length - 1){
+      summary.classList.remove('d-none');
+      updateSummary();
+    }else{
+      summary.classList.add('d-none');
+    }
+  }
+
+  // ====== Save currently selected choice into "answers" map ======
+  function captureChoice(){
+    const checked = document.querySelector('input[name="opt"]:checked');
+    if(checked){
+      const key = checked.id.split('-').pop();
+      // Remove the "A." / "B." at the start of the label text
+      const text = checked.nextElementSibling.textContent
+        .trim()
+        .replace(/^([A-D]\.)\s*/, '');
+      answers.set(idx, { key, text });
+      return true;
+    }
+    return false;
+  }
+
+  // ====== Update summary (right-side card on last step) ======
+  function updateSummary(){
+    if(!answers.size){
+      summaryBody.textContent = 'No selections yet.';
+      return;
+    }
+
+    const out = [];
+    FLOW.forEach((_, i)=>{
+      const a = answers.get(i);
+      out.push(
+        `<div class="pill"><strong>Step ${i + 1}:</strong> ${a ? `${a.key} – ${a.text}` : 'Skipped'}</div>`
+      );
+    });
+    summaryBody.innerHTML = out.join('<br/>');
+  }
+
+  // ====== Button events ======
+  // Go back to previous step
+  backBtn.addEventListener('click', () => {
+    if(idx > 0){
+      idx--;
+      render();
+    }
+  });
+
+  // Skip this step
+  skipBtn.addEventListener('click', () => {
+    answers.delete(idx);
+    idx = Math.min(idx + 1, FLOW.length - 1);
+    render();
+  });
+
+  // Next / Finish button
+  nextBtn.addEventListener('click', () => {
+    // Only move on if we captured a choice
+    // On last step, still allow clicking Finish
+    if(captureChoice() || idx === FLOW.length - 1){
+      if(idx < FLOW.length - 1){
+        idx++;
+        render();
+      }else{
+        // On last step, update summary and scroll to top
+        updateSummary();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  });
+
+  // ====== Initialize first render ======
+  render();
+</script>
 </body>
 </html>
